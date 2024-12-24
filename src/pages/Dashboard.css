@@ -1,0 +1,12 @@
+.playlist-button:hover + .playlist-menu {
+    display: block;
+  }
+  
+  .playlist-menu button {
+    transition: background-color 0.3s;
+  }
+  
+  .playlist-menu button:hover {
+    background-color: #1DB954;
+  }
+  
