@@ -79,7 +79,38 @@ export const getPlaylist = async () => {
 export const deletePlaylist = async (id) => {
   try {
     const response = await axiosInstance.delete(`${API_ENDPOINTS.PLAYLISTS}/${id}`);
-    toast.success('Playlist deleted successfully!');
+    toast.success('delete playlist successful!');
+
+    return response.data;
+  } catch (error) {
+ 
+    throw error.response?.data.error || error.message;
+  }
+};
+
+
+// Delete single songs in Playlist Service
+// Assuming you already have axiosInstance and toast properly set up
+
+export const deleteSongFromPlaylist = async (playlistId, songId) => {
+  try {
+    const response = await axiosInstance.delete(
+      `${API_ENDPOINTS.PLAYLISTS}/${playlistId}/song/${songId}`
+    );
+    toast.success('delete songs successful!');
+
+    return response.data;
+  } catch (error) {
+    throw error.response?.data.error || error.message;
+  }
+};
+
+
+// View Playlist Service
+export const fetchviewPlaylist = async (id) => {
+  try {
+    const response = await axiosInstance.get(`${API_ENDPOINTS.PLAYLISTS}/${id}`);
+    
     return response.data;
   } catch (error) {
     toast.error(error.response?.data.error || 'Failed to delete playlist');
@@ -99,6 +130,19 @@ export const updatePlaylist = async (id, data) => {
   }
 };
 
+
+
+// Update Playlist Service
+export const updateSongInPlaylist = async (id, data) => {
+  try {
+    const response = await axiosInstance.put(`${API_ENDPOINTS.PLAYLISTS}/${id}`, data);
+    toast.success('Playlist updated successfully!');
+    return response.data;
+  } catch (error) {
+    toast.error(error.response?.data.error || 'Failed to update playlist');
+    throw error.response?.data.error || error.message;
+  }
+};
 // Add Song to Playlist Service
 export const addSongToPlaylist = async (playlistId, track) => {
   try {

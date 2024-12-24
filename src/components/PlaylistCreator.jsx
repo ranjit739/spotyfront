@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { createPlaylist } from '../services/service';
+import { createPlaylist, getPlaylist } from '../services/service';
 import { toast } from 'react-toastify';
 
 const PlaylistCreator = ({ setCreateIsOpen }) => {
@@ -15,6 +15,7 @@ const PlaylistCreator = ({ setCreateIsOpen }) => {
             const res = await createPlaylist({ name: newPlaylistName });
             console.log("Playlist created successfully:", res);
             setNewPlaylistName("");
+            getPlaylist()
             setCreateIsOpen(false);  // Close the modal after successful creation
         } catch (error) {
             console.error("Playlist creation failed:", error);

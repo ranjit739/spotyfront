@@ -3,6 +3,11 @@ import Signup from "../../pages/authPages/SignUp";
 
 export const authRoute = () => {
   return [
+
+    {
+      element: <Login />,
+      path: "/",
+    },
     {
       element: <Login />,
       path: "/login",

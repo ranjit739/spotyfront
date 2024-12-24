@@ -32,6 +32,7 @@ const navigate=useNavigate()
       console.log("Login Successful:", res);
       
       // Store the token in cookies
+      console.log(res.token)
       if (res?.token) {
         Cookies.set('auth_token', res.token, { expires: 7 }); // Token will expire in 7 days
     navigate("/dashboard")
@@ -79,9 +80,7 @@ const navigate=useNavigate()
               required
             />
           </div>
-          <div className="mb-4 text-right">
-            <a href="#" className="text-sm text-blue-500 hover:underline">Forgot Password?</a>
-          </div>
+         
           <button
             type="submit"
             className="w-full py-3 bg-blue-500 text-white rounded-md shadow-md hover:bg-blue-600 focus:outline-none"

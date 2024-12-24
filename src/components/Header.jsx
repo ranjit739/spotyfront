@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import PlaylistCreator from './PlaylistCreator';
 import { useNavigate } from 'react-router-dom';
 import Cookies from 'js-cookie';
@@ -6,6 +6,12 @@ import Cookies from 'js-cookie';
 const Header = () => {
   const [createIsOpen, setCreateIsOpen] = useState(false);
   const navigate = useNavigate();
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+
+  useEffect(() => {
+    const token = Cookies.get('auth_token');
+    setIsAuthenticated(!!token);
+  }, []);
 
   const OpenCreateField = () => {
     setCreateIsOpen(true);
@@ -13,6 +19,7 @@ const Header = () => {
 
   const handleLogout = () => {
     Cookies.remove('token');
+    setIsAuthenticated(false);
     navigate("/login");
   };
 
@@ -23,11 +30,11 @@ const Header = () => {
         style={{
           background: '#1d1d1d',
           color: '#fff',
-          position: 'sticky',  // This makes the header sticky
-          top: 0,  // Keeps it fixed at the top
-          zIndex: 1000,  // Ensures it stays above other content when scrolling
-          width: '100%',  // Ensures the header spans the full width of the screen
-          boxShadow: '0 4px 6px rgba(0, 0, 0, 0.3)', // Optional shadow to make the header stand out
+          position: 'sticky',
+          top: 0,
+          zIndex: 1000,
+          width: '100%',
+          boxShadow: '0 4px 6px rgba(0, 0, 0, 0.3)',
         }}
       >
         <button
@@ -39,15 +46,14 @@ const Header = () => {
             borderRadius: '50px',
             color: '#fff',
             fontSize: '16px',
-            cursor: 'pointer',
-            position: 'relative',
+            cursor: isAuthenticated ? 'pointer' : 'not-allowed',
           }}
           onClick={() => navigate("/dashboard")}
+          disabled={!isAuthenticated}
         >
           Dashboard
         </button>
 
-        {/* Playlist Button */}
         <div className="relative">
           <button
             className="playlist-button mx-3"
@@ -58,16 +64,16 @@ const Header = () => {
               borderRadius: '50px',
               color: '#fff',
               fontSize: '16px',
-              cursor: 'pointer',
-              position: 'relative',
+              cursor: isAuthenticated ? 'pointer' : 'not-allowed',
             }}
             onClick={() => navigate("/myplaylist")}
+            disabled={!isAuthenticated}
           >
             My Playlist
           </button>
 
           <button
-            disabled={createIsOpen}
+            disabled={createIsOpen || !isAuthenticated}
             className="playlist-button"
             style={{
               backgroundColor: '#1DB954',
@@ -76,8 +82,7 @@ const Header = () => {
               borderRadius: '50px',
               color: '#fff',
               fontSize: '16px',
-              cursor: 'pointer',
-              position: 'relative',
+              cursor: isAuthenticated ? 'pointer' : 'not-allowed',
             }}
             onClick={() => OpenCreateField()}
           >
@@ -93,10 +98,10 @@ const Header = () => {
               borderRadius: '50px',
               color: '#fff',
               fontSize: '16px',
-              cursor: 'pointer',
-              position: 'relative',
+              cursor: isAuthenticated ? 'pointer' : 'not-allowed',
             }}
             onClick={() => handleLogout()}
+            disabled={!isAuthenticated}
           >
             Logout
           </button>

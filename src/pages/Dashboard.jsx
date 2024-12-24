@@ -119,9 +119,14 @@ const Dashboard = () => {
             color: '#fff',
           }}
         />
-        <button onClick={handleSearchSubmit} style={{ marginBottom: '20px' }}>
-          Search
-        </button>
+        <button
+        onClick={handleSearchSubmit}
+        style={{ marginBottom: '20px' }}
+        className="border border-white text-white px-4 py-2 rounded-lg  hover:text-black transition-all"
+      >
+        Search
+      </button>
+      
 
         {/* Display Playlist Cards */}
         {playlists.length > 0 && (

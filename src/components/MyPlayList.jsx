@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { deletePlaylist, getPlaylist, updatePlaylist } from '../services/service'; // Assuming you have this service
-import { toast } from 'react-toastify'; // Assuming you are using react-toastify for notifications
+import { deletePlaylist, fetchviewPlaylist, getPlaylist, updatePlaylist } from '../services/service';
+import { toast } from 'react-toastify';
 
-// Loader Component
 const Loader = () => (
   <div className="flex justify-center items-center">
     <div className="spinner-border animate-spin inline-block w-12 h-12 border-4 rounded-full border-t-transparent border-blue-600" role="status">
@@ -17,18 +16,17 @@ const MyPlaylist = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [playlists, setPlaylists] = useState([]);
-  const [activeDropdown, setActiveDropdown] = useState(null); // State to manage active dropdown
-  const [isRenameModalOpen, setIsRenameModalOpen] = useState(false); // Modal visibility state
-  const [currentPlaylist, setCurrentPlaylist] = useState(null); // Playlist being renamed
-  const [newName, setNewName] = useState(""); // New name input state
+  const [activeDropdown, setActiveDropdown] = useState(null);
+  const [isRenameModalOpen, setIsRenameModalOpen] = useState(false);
+  const [currentPlaylist, setCurrentPlaylist] = useState(null);
+  const [newName, setNewName] = useState("");
 
-  // Fetch the playlist
   const fetchPlayList = async () => {
     setLoading(true);
     try {
-      const res = await getPlaylist(); // Assuming getPlaylist() is an async function
+      const res = await getPlaylist();
       console.log("Successfully fetched playlists:", res);
-      setPlaylists(res?.data); // Assuming res.data is the playlist array
+      setPlaylists(res?.data);
     } catch (error) {
       console.error("Error fetching playlist:", error);
       setError(error.message);
@@ -38,19 +36,17 @@ const MyPlaylist = () => {
   };
 
   useEffect(() => {
-    fetchPlayList(); // Fetch playlists when component mounts
+    fetchPlayList();
   }, []);
 
-  // Handle viewing the playlist
-  const handleViewPlaylist = (playlistId) => {
-    navigate(`/playlist/${playlistId}`);
+  const handleViewPlaylist = async(playlistId) => {
+    navigate(`/myplaylist/${playlistId}`);
   };
 
-  // Handle deleting the playlist
   const handleDeletePlaylist = async (playlistId) => {
     setLoading(true);
     try {
-      const res = await deletePlaylist(playlistId); // Assuming deletePlaylist() is an async function
+      const res = await deletePlaylist(playlistId);
       console.log("Successfully deleted playlist:", res);
       fetchPlayList();
     } catch (error) {
@@ -62,14 +58,12 @@ const MyPlaylist = () => {
     }
   };
 
-  // Handle opening the rename modal
   const handleRenameClick = (playlist) => {
-    setCurrentPlaylist(playlist); // Set the playlist being renamed
-    setNewName(playlist.name); // Set current name as default
-    setIsRenameModalOpen(true); // Open the modal
+    setCurrentPlaylist(playlist);
+    setNewName(playlist.name);
+    setIsRenameModalOpen(true);
   };
 
-  // Handle renaming the playlist
   const handleRenameSubmit = async (e) => {
     e.preventDefault();
 
@@ -83,8 +77,8 @@ const MyPlaylist = () => {
     try {
       const res = await updatePlaylist(currentPlaylist._id, { name: newName });
       console.log("Successfully renamed playlist:", res);
-      fetchPlayList(); // Re-fetch playlists after updating
-      setIsRenameModalOpen(false); // Close the modal
+      fetchPlayList();
+      setIsRenameModalOpen(false);
       toast.success("Playlist renamed successfully!");
     } catch (error) {
       console.error("Error renaming playlist:", error);
@@ -99,13 +93,10 @@ const MyPlaylist = () => {
     <div className="container mx-auto mt-8">
       <h2 className="text-2xl font-semibold text-center mb-6">My Playlists</h2>
 
-      {/* Show loader if playlists are being fetched */}
       {loading && <Loader />}
 
-      {/* Show error if any */}
       {error && <div className="text-center text-red-500">{error}</div>}
 
-      {/* Display Playlists */}
       {!loading && playlists.length === 0 && (
         <div className="text-center text-gray-500">No playlists found.</div>
       )}
@@ -151,7 +142,6 @@ const MyPlaylist = () => {
         ))}
       </div>
 
-      {/* Rename Modal */}
       {isRenameModalOpen && (
         <div className="fixed inset-0 bg-gray-600 bg-opacity-50 flex justify-center items-center z-50">
           <div className="bg-white rounded-lg shadow-lg w-1/3 p-6">
